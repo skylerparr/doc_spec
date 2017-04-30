@@ -1,7 +1,5 @@
 defmodule DocSpec do
-  @moduledoc """
-  Documentation for DocSpec.
-  """
+  
   defmacro __using__(args) do
     IO.inspect "using"
     IO.inspect args
@@ -30,20 +28,37 @@ defmodule DocSpec do
   end
 
   defp run_docspec(string, module) do
-    IO.inspect(string |> String.split("\n"))
-    File.write("test/test_attributes_test.exs", test())
+    options = string 
+      |> String.split("\n")
+      |> Enum.filter(&(&1 != ""))
+      |> extract_cases
+    #|> map_cases
+    #create_test_file(module)
   end
 
-  defp test do
-    """
-    defmodule TestAttributesTest do
-      use ExUnit.Case
+  defp extract_cases(items) do
+    items
+    #|> Enum.scan({nil, %{}}, &reduce_items/2)
+    #|> List.last
+    #|> IO.inspect
+  end
 
-      test "should test the truth" do
-        assert 3 == 2
-      end
+  defp get_state(item) do
+    case item do
+      "Case:" -> :cases
+      "Given:" -> :given
+      "Example:" -> :examples
+      _ -> nil
     end
-    """
+  end
+
+  defp create_test_file(content, module) do
+    full_file_name = "test/#{module |> Macro.underscore}_test.exs"
+    file_name = full_file_name |> Path.basename
+    path = full_file_name |> Path.dirname
+
+    File.mkdir_p(path)
+    File.write("#{path}/#{file_name}", content)
   end
 
   def on_def(env, kind, name, args, guards, body) do

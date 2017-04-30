@@ -1,0 +1,12 @@
+defmodule <%= module %> do
+  use ExUnit.Case, async: true
+
+  <%= for test <- tests do %>
+  test <%= test.description %> do
+    <%= for assertion <- assertions %>
+    <%= assertion %>
+    <% end %> 
+  end
+  <% end %> 
+
+end
