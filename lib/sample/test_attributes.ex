@@ -16,6 +16,7 @@ defmodule Sample.TestAttributes do
   100
   """
   def my_func(arg) do
+    IO.inspect arg
     arg.id
   end
 

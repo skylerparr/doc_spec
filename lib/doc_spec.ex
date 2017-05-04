@@ -4,19 +4,12 @@ defmodule DocSpec do
     IO.inspect "using"
     IO.inspect args
     quote do
-      @on_definition {unquote(__MODULE__), :on_def}
-      @before_compile unquote(__MODULE__)
       @after_compile unquote(__MODULE__)
       import DocSpec, only: [on_def: 6]
       Module.register_attribute(__MODULE__,
       :docspec, 
       accumulate: true)
     end
-  end
-
-  defmacro __before_compile__(env) do
-    IO.inspect "before compile"
-    current_module = env.module
   end
 
   defmacro __after_compile__(env, _bytes) do
@@ -28,6 +21,8 @@ defmodule DocSpec do
   end
 
   defp run_docspec(string, module) do
+    docs = DocParser.parse(string)
+    IO.inspect docs
     options = string 
       |> String.split("\n")
       |> Enum.filter(&(&1 != ""))

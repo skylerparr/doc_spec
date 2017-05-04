@@ -18,7 +18,7 @@ defmodule DocParserTest do
 
   test "groups keys by special topic" do
    string = 
-      """
+    """
     Description:
     blah blah
 
@@ -47,8 +47,10 @@ defmodule DocParserTest do
     parsed = DocParser.parse(string)
     assert parsed == [description: ["blah blah"],
      group: ["Something about the group", "I like this group also"],
-     foo: ["some Foo"], group: ["Something about this groups"],
-     bar: ["more blahlaut", "and some Bar", "don't forget the nachos"],
+     bar: ["more blahlaut"],
+     foo: ["some Foo"], 
+     group: ["Something about this groups"],
+     bar: ["Group2", "and some Bar", "don't forget the nachos"],
      foo: ["Group2"]]
   end
 end

@@ -12,9 +12,8 @@ defmodule DocParser do
   end
   defp to_map({k,v}, acc) do
     last_key = acc |> List.last |> elem(0)
-    #IO.inspect {last_key, k}
     if(last_key == k) do
-      Keyword.put(acc, k, (Keyword.get(acc, k) || []) ++ [v])
+      Keyword.put(acc, k, (Keyword.get(acc |> Enum.reverse, k) || []) ++ [v])
       |> Enum.reverse
     else 
       acc ++ [{k, [v]}]
